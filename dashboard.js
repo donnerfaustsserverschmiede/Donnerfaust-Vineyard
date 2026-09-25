@@ -15,8 +15,8 @@ function products(){return db.items.filter(i=>i.kind==='product')}
 
 function render(){
   const cash=db.cash.reduce((a,x)=>a+(x.type==='Einnahme'?1:-1)*(+x.amount||0),0);
-  $('#statStock').textContent=db.items.reduce((a,x)=>a+(+x.stock||0),0);
-  $('#statProduction').textContent=db.productions.length;
+  if($('#statStock')) $('#statStock').textContent=db.items.reduce((a,x)=>a+(+x.stock||0),0);
+  if($('#statProduction')) $('#statProduction').textContent=db.productions.length;
   $('#statOrders').textContent=db.orders.filter(x=>x.status!=='Erledigt').length;
   $('#statInvoices').textContent=db.invoices.filter(x=>x.status!=='Bezahlt').length;
   $('#statCash').textContent=money(cash);
@@ -59,7 +59,7 @@ function openForm(k){
  if(k==='sale'){openSaleForm();return}
  if(k==='order'){openOrderForm();return}
  const forms={
-  item:()=>field('name','Name')+field('category','Kategorie')+field('purchasePrice','Einkaufspreis ($)','number','step="0.01" min="0"')+field('stock','Anfangsbestand (Stück)','number','step="1" min="0"')+'<label>Beschreibung<textarea name="description"></textarea></label>',
+  item:()=>field('name','Name')+selectField('category','Kategorie','<option value="Zutat">Zutat</option><option value="Produkt">Produkt</option>')+field('purchasePrice','Einkaufspreis ($)','number','step="0.01" min="0"')+field('salePrice','Verkaufspreis ($)','number','step="0.01" min="0"')+field('stock','Anfangsbestand (Stück)','number','step="1" min="0"')+'<label>Beschreibung<textarea name="description"></textarea></label>',
   invoice:()=>field('customer','Kunde')+field('due','Fällig am','date')+field('amount','Betrag ($)','number','step="0.01" min="0"')+field('source','Quelle')+selectField('status','Status','<option>Offen</option><option>Bezahlt</option><option>Überfällig</option>'),
   cash:()=>field('date','Datum','date')+field('description','Beschreibung')+selectField('type','Typ','<option>Einnahme</option><option>Ausgabe</option>')+field('amount','Betrag ($)','number','step="0.01" min="0"'),
   employee:()=>field('name','Name')+field('role','Rang / Rolle')+field('phone','Telefon','text','required')+field('mail','E-Mail','email','required'),
@@ -102,7 +102,7 @@ function submitRecipe(e){
 }
 function submitForm(e,k){
  e.preventDefault();const fd=new FormData(e.target);
- if(k==='item'){db.items.push({id:uid(),name:fd.get('name'),kind:'resource',category:fd.get('category'),stock:Math.max(0,Math.floor(Number(fd.get('stock'))||0)),purchasePrice:Number(fd.get('purchasePrice'))||0,description:fd.get('description')||''})}
+ if(k==='item'){const category=fd.get('category')==='Produkt'?'Produkt':'Zutat';db.items.push({id:uid(),name:fd.get('name'),kind:category==='Produkt'?'product':'resource',category,stock:Math.max(0,Math.floor(Number(fd.get('stock'))||0)),purchasePrice:Number(fd.get('purchasePrice'))||0,salePrice:Number(fd.get('salePrice'))||0,description:fd.get('description')||''})}
  if(k==='employee'){db.employees.push({id:uid(),name:fd.get('name'),roles:[fd.get('role')],phone:fd.get('phone'),mail:fd.get('mail'),openCommission:0})}
  if(k==='appointment'){db.appointments.push({id:uid(),title:fd.get('title'),person:fd.get('person'),date:fd.get('date'),time:fd.get('time'),note:fd.get('note')})}
  if(k==='invoice'){db.invoices.push({id:uid(),number:'RE-'+new Date().getFullYear()+'-'+String(db.invoices.length+1).padStart(4,'0'),customer:fd.get('customer'),due:fd.get('due'),amount:Number(fd.get('amount'))||0,source:fd.get('source'),status:fd.get('status')})}
