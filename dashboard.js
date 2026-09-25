@@ -47,7 +47,8 @@ function render(){
 }
 
 function formShell(title,body,k){
-  $('#formContent').innerHTML='<p class="eyebrow">VERWALTUNG</p><h2>'+title+'</h2><form onsubmit="submitForm(event,\''+k+'\')"><div class="form-grid">'+body+'</div><div class="form-actions"><button type="button" class="btn" onclick="closeForm()">Abbrechen</button><button class="btn btn-gold">Speichern</button></div></form>';
+  const handler=k==='purchase'?'submitPurchase':k==='sale'?'submitSale':k==='order'?'submitOrder':k==='stock'?'submitStock':`submitForm(event,'${k}')`;
+  $('#formContent').innerHTML='<p class="eyebrow">VERWALTUNG</p><h2>'+title+'</h2><form onsubmit="'+handler+'"><div class="form-grid">'+body+'</div><div class="form-actions"><button type="button" class="btn" onclick="closeForm()">Abbrechen</button><button class="btn btn-gold">Speichern</button></div></form>';
   $('#modal').classList.add('show');
 }
 function field(name,label,type='text',extra=''){return '<label>'+label+'<input name="'+name+'" type="'+type+'" '+extra+' required></label>'}
@@ -170,7 +171,6 @@ function openProduction(){
 function renderModalProduction(){const d=getProductionData($('#modalRecipe')?.value,$('#modalQty')?.value);if(!d)return;$('#modalProductionPreview').innerHTML='<div class="production-summary"><b>Benötigte Ressourcen</b>'+d.requirements.map(x=>'<div class="requirement '+(x.ok?'available':'missing')+'"><span>'+esc(x.item?.name||'–')+'</span><span>'+x.need+' / Lager '+(x.item?.stock||0)+' Stück</span></div>').join('')+'<div class="output-line">Ausgabe: <b>'+esc(d.out?.name||'–')+' × '+d.outputAmount+'</b></div></div>'}
 function bookProductionModal(){const d=getProductionData($('#modalRecipe')?.value,$('#modalQty')?.value);if(!d)return;if(!d.requirements.every(x=>x.ok)){alert('Nicht genügend Ressourcen.');return}if(!d.out){alert('Produkt fehlt.');return}d.requirements.forEach(x=>x.item.stock-=x.need);d.out.stock+=d.outputAmount;const emp=$('#employeeId')?.value||'';db.productions.push({id:uid(),date:new Date().toLocaleString('de-DE'),recipeName:d.r.name,quantity:d.amount,outputName:d.out.name,outputQuantity:d.outputAmount,employeeId:emp});const base=d.outputAmount*(d.out.salePrice||0);if(emp)addCommission(emp,base,'Produktion',d.out.name);save();closeForm()}
 function closeForm(){$('#modal').classList.remove('show')}
-document.addEventListener('submit',e=>{if(e.target.matches('form')){const k=e.target.getAttribute('onsubmit')?.match(/submitForm\(event,'([^']+)'\)/)?.[1];if(k==='purchase'||k==='sale'||k==='order'||k==='stock')e.preventDefault()}});
 window.submitPurchase=submitPurchase;window.submitSale=submitSale;window.submitOrder=submitOrder;window.submitStock=submitStock;window.bookProduction=bookProduction;
 $('#productionRecipe')?.addEventListener('change',renderProduction);$('#productionQty')?.addEventListener('input',renderProduction);
 const menuToggle=$('#menuToggle'),drawer=$('#drawer'),backdrop=$('#drawerBackdrop');
