@@ -69,21 +69,21 @@ function openForm(k){
 function openRecipeForm(){
   if(!db.items.length){alert('Bitte zuerst die benötigten Lager-Items anlegen.');return;}
   const itemOptions=db.items.map(i=>'<option value="'+i.id+'">'+esc(i.name)+' ('+esc(i.unit)+')</option>').join('');
-  const first='<div class="recipe-row"><select class="recipe-item">'+itemOptions+'</select><input class="recipe-qty" type="number" min="0.01" step="0.01" value="1"><button type="button" class="btn" onclick="this.parentElement.remove()">×</button></div>';
+  const first='<div class="recipe-row"><select class="recipe-item">'+itemOptions+'</select><input class="recipe-qty" type="number" min="1" step="1" value="1"><button type="button" class="btn" onclick="this.parentElement.remove()">×</button></div>';
   const outOptions='<option value="">Ausgabe-Item wählen</option>'+itemOptions;
-  $('#formContent').innerHTML='<p class="eyebrow">PRODUKTIONSREZEPT</p><h2>Rezept anlegen</h2><form onsubmit="submitRecipe(event)"><div class="form-grid"><label>Rezeptname<input name="name" required></label><label>Ausgabe-Item<select name="outputItemId" required>'+outOptions+'</select></label><label>Ausgabemenge<input name="outputQty" type="number" min="0.01" step="0.01" value="1" required></label><label class="full">Herstellungshinweis<textarea name="note"></textarea></label></div><div class="ingredient-head"><b>Benötigte Lagerartikel</b><button type="button" class="btn" onclick="addIngredientRow()">+ Artikel</button></div><div id="ingredientRows">'+first+'</div><div class="form-actions"><button type="button" class="btn" onclick="closeForm()">Abbrechen</button><button class="btn btn-gold">Rezept speichern</button></div></form>';
+  $('#formContent').innerHTML='<p class="eyebrow">PRODUKTIONSREZEPT</p><h2>Rezept anlegen</h2><form onsubmit="submitRecipe(event)"><div class="form-grid"><label>Rezeptname<input name="name" required></label><label>Ausgabe-Item<select name="outputItemId" required>'+outOptions+'</select></label><label>Ausgabemenge<input name="outputQty" type="number" min="1" step="1" value="1" required></label><label class="full">Herstellungshinweis<textarea name="note"></textarea></label></div><div class="ingredient-head"><b>Benötigte Lagerartikel</b><button type="button" class="btn" onclick="addIngredientRow()">+ Artikel</button></div><div id="ingredientRows">'+first+'</div><div class="form-actions"><button type="button" class="btn" onclick="closeForm()">Abbrechen</button><button class="btn btn-gold">Rezept speichern</button></div></form>';
   $('#modal').classList.add('show');
 }
 function addIngredientRow(){
   const opts=db.items.map(i=>'<option value="'+i.id+'">'+esc(i.name)+' ('+esc(i.unit)+')</option>').join('');
-  const row=document.createElement('div');row.className='recipe-row';row.innerHTML='<select class="recipe-item">'+opts+'</select><input class="recipe-qty" type="number" min="0.01" step="0.01" value="1"><button type="button" class="btn" onclick="this.parentElement.remove()">×</button>';
+  const row=document.createElement('div');row.className='recipe-row';row.innerHTML='<select class="recipe-item">'+opts+'</select><input class="recipe-qty" type="number" min="1" step="1" value="1"><button type="button" class="btn" onclick="this.parentElement.remove()">×</button>';
   $('#ingredientRows').appendChild(row);
 }
 function submitRecipe(e){
   e.preventDefault();
-  const fd=new FormData(e.target),ingredients=[...document.querySelectorAll('.recipe-row')].map(row=>({itemId:row.querySelector('.recipe-item').value,qty:Number(row.querySelector('.recipe-qty').value)})).filter(x=>x.itemId&&x.qty>0);
+  const fd=new FormData(e.target),ingredients=[...document.querySelectorAll('.recipe-row')].map(row=>({itemId:row.querySelector('.recipe-item').value,qty:Math.max(1,Math.floor(Number(row.querySelector('.recipe-qty').value)||1))})).filter(x=>x.itemId&&x.qty>0);
   if(!ingredients.length){alert('Mindestens ein benötigter Artikel muss hinterlegt werden.');return;}
-  db.recipes.push({id:uid(),name:fd.get('name'),outputItemId:fd.get('outputItemId'),outputQty:Number(fd.get('outputQty')),note:fd.get('note')||'',ingredients});
+  db.recipes.push({id:uid(),name:fd.get('name'),outputItemId:fd.get('outputItemId'),outputQty:Math.max(1,Math.floor(Number(fd.get('outputQty'))||1)),note:fd.get('note')||'',ingredients});
   save();closeForm();
 }
 
@@ -97,7 +97,7 @@ function openProduction(){
 }
 function getProductionData(recipeId,qty){
   const raw=db.recipes.find(r=>r.id===recipeId);if(!raw)return null;
-  const r=normalizeRecipe(raw), amount=Math.max(1,Number(qty)||1);
+  const r=normalizeRecipe(raw), amount=Math.max(1,Math.floor(Number(qty)||1));
   const requirements=r.ingredients.map(i=>{const item=db.items.find(x=>x.id===i.itemId);const need=i.qty*amount;return {item,per:i.qty,need,ok:item&&Number(item.stock)>=need};});
   const out=db.items.find(i=>i.id===r.outputItemId);
   return {r,amount,requirements,out,outputAmount:(r.outputQty||1)*amount};
