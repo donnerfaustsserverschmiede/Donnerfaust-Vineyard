@@ -1,5 +1,5 @@
 const K='dfv-v5';
-const seed={items:[],recipes:[],productions:[],orders:[],purchases:[],sales:[],invoices:[],cash:[],employees:[],appointments:[],payouts:[]};
+const seed={items:[],recipes:[],productions:[],orders:[],purchases:[],sales:[],invoices:[],cash:[],employees:[],appointments:[],payouts:[],stockMovements:[]};
 let db=JSON.parse(localStorage.getItem(K)||'null')||seed;
 const $=s=>document.querySelector(s);
 const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(Number(n)||0);
@@ -19,11 +19,13 @@ function render(){
   if($('#statProduction')) $('#statProduction').textContent=db.productions.length;
   $('#statOrders').textContent=db.orders.filter(x=>x.status!=='Erledigt').length;
   $('#statInvoices').textContent=db.invoices.filter(x=>x.status!=='Bezahlt').length;
-  $('#statCash').textContent=money(cash);
+  if($('#statCash')) $('#statCash').textContent=money(cash);
   $('#statEmployees').textContent=db.employees.length;
   $('#cashTotal').textContent=money(cash);
 
   $('#itemsBody').innerHTML=db.items.map(x=>'<tr><td><b>'+esc(x.name)+'</b>'+(x.kind==='product'?' <span class="tag">PRODUKT</span>':'')+'</td><td>'+esc(x.category||'–')+'</td><td>'+x.stock+' Stück</td><td>'+money(x.purchasePrice||0)+'</td><td><button class="btn" onclick="openStock('+JSON.stringify(x.id)+')">Buchen</button></td></tr>').join('')||empty(5,'Noch keine Ressourcen oder Produkte angelegt.');
+
+  $('#stockMovementsBody').innerHTML=(db.stockMovements||[]).slice().reverse().map(m=>'<tr><td>'+esc(m.date)+'</td><td>'+esc(itemName(m.itemId))+'</td><td><span class="tag '+(m.delta>0?'ok':'danger')+'">'+(m.delta>0?'+':'')+m.delta+' Stück</span></td><td>'+esc(employeeName(m.employeeId))+'</td><td>'+esc(m.reason||'–')+'</td><td>'+m.stockAfter+' Stück</td></tr>').join('')||empty(6,'Noch keine Lagerbewegungen.');
 
   $('#ordersBody').innerHTML=db.orders.map(o=>'<tr><td>'+esc(o.number)+'</td><td>'+esc(o.customer)+'</td><td>'+esc(o.items.map(i=>itemName(i.itemId)+' × '+i.qty).join(', '))+'</td><td>'+money(o.total)+'</td><td><span class="tag '+(o.status==='Erledigt'?'ok':'warn')+'">'+esc(o.status)+'</span></td><td>'+(o.status==='Erledigt'?'':'<button class="btn btn-gold" onclick="completeOrder(\''+o.id+'\')">Erledigt</button>')+'</td></tr>').join('')||empty(6,'Keine Bestellungen.');
 
@@ -117,7 +119,10 @@ function openStock(id){
 function submitStock(e){
  e.preventDefault();const fd=new FormData(e.target),item=db.items.find(i=>i.id===window.stockItemId),qty=Math.max(1,Math.floor(Number(fd.get('qty'))||0)),delta=fd.get('type')==='Eingang'?qty:-qty;
  if(!item||item.stock+delta<0){alert('Nicht genügend Lagerbestand.');return}
- item.stock+=delta;save();closeForm();
+ item.stock+=delta;
+ if(!db.stockMovements) db.stockMovements=[];
+ db.stockMovements.push({id:uid(),date:new Date().toLocaleString('de-DE'),itemId:item.id,delta,employeeId:fd.get('employeeId'),reason:fd.get('reason')||'',stockAfter:item.stock});
+ save();closeForm();
 }
 function completeOrder(id){
  const o=db.orders.find(x=>x.id===id);if(!o||o.status==='Erledigt')return;
