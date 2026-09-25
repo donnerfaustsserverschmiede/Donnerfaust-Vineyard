@@ -57,9 +57,7 @@ function openForm(k){
     invoice:['invoices','Rechnung',[['number','Rechnungsnummer','text'],['customer','Kunde','text'],['due','Fällig am','date'],['amount','Betrag ($)','number'],['status','Status','select','Offen|Bezahlt|Überfällig']]],
     item:['items','Item / Lagerartikel',[['name','Name','text'],['category','Kategorie','text'],['stock','Bestand','number'],['unit','Einheit','text'],['price','Verkaufspreis ($)','number'],['description','Beschreibung','textarea']]],
     cash:['cash','Kassenbuchung',[['date','Datum','date'],['description','Beschreibung','text'],['type','Typ','select','Einnahme|Ausgabe'],['amount','Betrag ($)','number']]],
-    employee:['employees','Mitarbeiter',[['name','Name','text'],['role','Position','text'],['phone','Telefon','text'],['mail','E-Mail','email']],
-    purchase:['cash','Einkauf',[['date','Datum','date'],['description','Beschreibung','text'],['type','Typ','select','Ausgabe'] ],
-    sale:['cash','Verkauf',[['date','Datum','date'],['description','Beschreibung','text'],['type','Typ','select','Einnahme']]
+    employee:['employees','Mitarbeiter',[['name','Name','text'],['role','Position','text'],['phone','Telefon','text'],['mail','E-Mail','email']]]
   };
   let [type,title,fields]=forms[k];
   let h='<p class="eyebrow">VERWALTUNG</p><h2>'+title+' anlegen</h2><form onsubmit="submitForm(event,\''+k+'\')"><div class="form-grid">';
@@ -143,7 +141,7 @@ function bookProductionData(data){
 }
 
 function closeForm(){$('#modal').classList.remove('show');}
-function submitForm(e,k){e.preventDefault();const maps={order:'orders',appointment:'appointments',invoice:'invoices',item:'items',cash:'cash',employee:'employees',purchase:'cash',sale:'cash'};const o={id:uid()};new FormData(e.target).forEach((v,n)=>o[n]=v);db[maps[k]].push(o);save();closeForm();}
+function submitForm(e,k){e.preventDefault();const maps={order:'orders',appointment:'appointments',invoice:'invoices',item:'items',cash:'cash',employee:'employees'};const o={id:uid()};new FormData(e.target).forEach((v,n)=>o[n]=v);db[maps[k]].push(o);save();closeForm();}
 function calc(){$('#commissionResult').textContent=euro((+$('#commissionRevenue').value||0)*(+$('#commissionRate').value||0)/100);}
 document.addEventListener('input',e=>{if(e.target.id==='commissionRevenue'||e.target.id==='commissionRate')calc();});
 $('#productionRecipe')?.addEventListener('change',updateProductionPreview);
