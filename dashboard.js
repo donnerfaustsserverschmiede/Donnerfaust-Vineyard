@@ -47,7 +47,7 @@ function render(){
 }
 
 function formShell(title,body,k){
-  const handler=k==='purchase'?'submitPurchase':k==='sale'?'submitSale':k==='order'?'submitOrder':k==='stock'?'submitStock':`submitForm(event,'${k}')`;
+  const handler=k==='purchase'?'submitPurchase(event)':k==='sale'?'submitSale(event)':k==='order'?'submitOrder(event)':k==='stock'?'submitStock(event)':`submitForm(event,'${k}')`;
   $('#formContent').innerHTML='<p class="eyebrow">VERWALTUNG</p><h2>'+title+'</h2><form onsubmit="'+handler+'"><div class="form-grid">'+body+'</div><div class="form-actions"><button type="button" class="btn" onclick="closeForm()">Abbrechen</button><button class="btn btn-gold">Speichern</button></div></form>';
   $('#modal').classList.add('show');
 }
