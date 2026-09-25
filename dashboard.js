@@ -173,6 +173,17 @@ function bookProductionModal(){const d=getProductionData($('#modalRecipe')?.valu
 function closeForm(){$('#modal').classList.remove('show')}
 window.submitPurchase=submitPurchase;window.submitSale=submitSale;window.submitOrder=submitOrder;window.submitStock=submitStock;window.bookProduction=bookProduction;
 $('#productionRecipe')?.addEventListener('change',renderProduction);$('#productionQty')?.addEventListener('input',renderProduction);
+const viewIds=['dashboard','lager','bestellungen','einkauf','verkauf','produktion','rechnungen','kasse','mitarbeiter','termine','provision','rezepte'];
+function routeView(){
+  const raw=(location.hash||'#dashboard').slice(1);
+  const view=viewIds.includes(raw)?raw:'dashboard';
+  document.body.classList.remove(...viewIds.map(x=>'view-'+x));
+  document.body.classList.add('view-'+view);
+  window.scrollTo({top:0,behavior:'instant'});
+}
+window.addEventListener('hashchange',routeView);
+routeView();
+
 const menuToggle=$('#menuToggle'),drawer=$('#drawer'),backdrop=$('#drawerBackdrop');
 function closeMenu(){drawer.classList.remove('open');backdrop.classList.remove('show');menuToggle.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true')}
 menuToggle.onclick=()=>{const open=drawer.classList.toggle('open');backdrop.classList.toggle('show',open);menuToggle.setAttribute('aria-expanded',String(open));drawer.setAttribute('aria-hidden',String(!open))};
