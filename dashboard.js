@@ -40,7 +40,7 @@ function render(){
 
   $('#recipes').innerHTML=db.recipes.map(raw=>{
     const x=normalizeRecipe(raw);
-    const ing=x.ingredients.map(i=>{const item=db.items.find(a=>a.id===i.itemId);return item?esc(item.name)+' × '+i.qty+' '+esc(item.unit):'Unbekannter Artikel';}).join('<br>');
+    const ing=x.ingredients.map(i=>{const item=db.items.find(a=>a.id===i.itemId);return item?esc(item.name)+' × '+i.qty+' '+'Stück':'Unbekannter Artikel';}).join('<br>');
     const out=db.items.find(i=>i.id===x.outputItemId);
     return '<article class="recipe"><div class="employee-role">REZEPT</div><h3>'+esc(x.name)+'</h3><p class="muted"><b>Zutaten:</b><br>'+ (ing||'Keine Zutaten')+'</p><p class="muted"><b>Ergebnis:</b> '+esc(out?.name||x.output||'–')+' × '+(x.outputQty||1)+'</p><button class="btn" onclick="del(\'recipes\',\''+x.id+'\')">Löschen</button></article>';
   }).join('')||'<p class="muted">Keine Rezepte.</p>';
@@ -52,11 +52,11 @@ function render(){
 function openForm(k){
   if(k==='recipe'){openRecipeForm();return;}
   const forms={
-    order:['orders','Auftrag',[['customer','Kunde','text'],['order','Bestellung','text'],['date','Termin','date'],['amount','Betrag (€)','number'],['status','Status','select','Offen|In Bearbeitung|Erledigt']]],
+    order:['orders','Auftrag',[['customer','Kunde','text'],['order','Bestellung','text'],['date','Termin','date'],['amount','Betrag ($)','number'],['status','Status','select','Offen|In Bearbeitung|Erledigt']]],
     appointment:['appointments','Termin',[['title','Titel','text'],['person','Person / Kunde','text'],['date','Datum','date'],['time','Uhrzeit','time'],['note','Notiz','textarea']]],
-    invoice:['invoices','Rechnung',[['number','Rechnungsnummer','text'],['customer','Kunde','text'],['due','Fällig am','date'],['amount','Betrag (€)','number'],['status','Status','select','Offen|Bezahlt|Überfällig']]],
-    item:['items','Item / Lagerartikel',[['name','Name','text'],['category','Kategorie','text'],['stock','Bestand','number'],['unit','Einheit','text'],['price','Verkaufspreis (€)','number'],['description','Beschreibung','textarea']]],
-    cash:['cash','Kassenbuchung',[['date','Datum','date'],['description','Beschreibung','text'],['type','Typ','select','Einnahme|Ausgabe'],['amount','Betrag (€)','number']]],
+    invoice:['invoices','Rechnung',[['number','Rechnungsnummer','text'],['customer','Kunde','text'],['due','Fällig am','date'],['amount','Betrag ($)','number'],['status','Status','select','Offen|Bezahlt|Überfällig']]],
+    item:['items','Item / Lagerartikel',[['name','Name','text'],['category','Kategorie','text'],['stock','Bestand','number'],['unit','Einheit','text'],['price','Verkaufspreis ($)','number'],['description','Beschreibung','textarea']]],
+    cash:['cash','Kassenbuchung',[['date','Datum','date'],['description','Beschreibung','text'],['type','Typ','select','Einnahme|Ausgabe'],['amount','Betrag ($)','number']]],
     employee:['employees','Mitarbeiter',[['name','Name','text'],['role','Position','text'],['phone','Telefon','text'],['mail','E-Mail','email']]
   };
   let [type,title,fields]=forms[k];
