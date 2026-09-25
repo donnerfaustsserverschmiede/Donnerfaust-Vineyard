@@ -1,0 +1,104 @@
+:root{
+  --black:#05070d;
+  --navy:#08111f;
+  --navy-2:#0b1930;
+  --blue:#154a88;
+  --blue-bright:#2879c9;
+  --gold:#d9ad58;
+  --gold-light:#f2d48c;
+  --cream:#f3ead8;
+  --muted:#a9afba;
+  --line:rgba(217,173,88,.24);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--black);color:var(--cream);font-family:Inter,Arial,sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.08;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:4px 4px;z-index:20;mix-blend-mode:soft-light}
+.site-glow{position:fixed;inset:-20%;pointer-events:none;background:radial-gradient(circle at 72% 25%,rgba(24,87,159,.22),transparent 25%),radial-gradient(circle at 45% 80%,rgba(212,160,55,.10),transparent 25%);z-index:-1}
+.topbar{position:fixed;top:0;left:0;right:0;height:78px;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;background:rgba(5,7,13,.72);backdrop-filter:blur(16px);border-bottom:1px solid rgba(217,173,88,.14);z-index:50}
+.brand{display:flex;align-items:center;gap:12px;color:var(--cream);text-decoration:none;font:600 13px Cinzel,serif;letter-spacing:2px}
+.brand b{display:block;color:var(--gold);font-size:9px;letter-spacing:3px;margin-top:2px}
+.brand-mark{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--gold);color:var(--gold);font:700 12px Cinzel,serif;border-radius:50%}
+.nav{display:flex;gap:30px}
+.nav a{color:#d7d4ce;text-decoration:none;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;transition:.25s}
+.nav a:hover,.nav a.active{color:var(--gold-light)}
+.menu-toggle{display:none;background:none;border:0;color:var(--gold);font-size:25px}
+.hero{min-height:100vh;position:relative;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:110px 7vw 70px;overflow:hidden;background:radial-gradient(circle at 75% 47%,rgba(20,72,132,.32),transparent 34%),linear-gradient(120deg,#04060b 0%,#07101c 58%,#05070d 100%)}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,7,13,.96) 0%,rgba(5,7,13,.45) 53%,rgba(5,7,13,.08) 100%);pointer-events:none}
+.hero-copy,.hero-logo,.hero-bottom{position:relative;z-index:2}
+.hero-copy{max-width:650px}
+.eyebrow{color:var(--gold);font:600 11px Cinzel,serif;letter-spacing:3px;text-transform:uppercase;display:flex;align-items:center;gap:13px}
+.eyebrow span{display:inline-block;width:32px;height:1px;background:var(--gold)}
+h1,h2,h3{font-family:Cinzel,Georgia,serif}
+h1{font-size:clamp(48px,6vw,88px);line-height:1.02;letter-spacing:-2px;margin:22px 0;color:#f5eee1}
+h1 em{font-style:normal;color:var(--gold-light)}
+.lead{max-width:590px;color:#b9bec8;font-size:16px;line-height:1.9}
+.hero-actions{display:flex;gap:14px;margin-top:35px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:18px;padding:15px 22px;text-decoration:none;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;border:1px solid var(--line);transition:.3s}
+.btn-gold{background:linear-gradient(135deg,#c99b46,#edce84);color:#101014;border-color:#e4c06e;font-weight:700}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(217,173,88,.18)}
+.btn-ghost{color:var(--cream);background:rgba(255,255,255,.02)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-light)}
+.hero-logo{display:flex;justify-content:center;align-items:center}
+.hero-logo img{width:min(45vw,570px);max-width:100%;filter:drop-shadow(0 25px 50px rgba(0,0,0,.65));animation:float 7s ease-in-out infinite}
+.logo-ring{position:absolute;width:min(34vw,430px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(31,91,158,.16),transparent 66%);box-shadow:0 0 80px rgba(28,99,174,.12)}
+.hero-bottom{grid-column:1/-1;display:flex;gap:42px;border-top:1px solid rgba(217,173,88,.18);padding-top:22px;margin-top:15px}
+.hero-bottom div{display:flex;gap:12px;align-items:center;color:#777e8a;font-size:10px;text-transform:uppercase;letter-spacing:2px}
+.hero-bottom strong{font-family:Cinzel,serif;color:var(--gold);font-size:12px}
+.section{padding:120px 8vw}
+.intro{background:linear-gradient(180deg,#060911,#08101b)}
+.section-heading{max-width:720px;margin-bottom:55px}
+.section-heading h2{font-size:clamp(34px,4vw,60px);margin:12px 0;color:#f2ecdf}
+h2 span{color:var(--gold)}
+.intro-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:8vw;max-width:1100px}
+.large-copy{font:500 clamp(22px,2.5vw,34px)/1.55 Cinzel,serif;color:#e7dfd0;margin:0}
+.muted{color:var(--muted);line-height:1.9;margin:0}
+.wine-preview{background:var(--navy);position:relative}
+.wine-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.wine-card{min-height:310px;padding:28px 24px;border:1px solid rgba(217,173,88,.15);background:linear-gradient(145deg,rgba(255,255,255,.025),rgba(5,7,13,.2));position:relative;overflow:hidden;transition:.3s}
+.wine-card:before{content:"";position:absolute;inset:auto -30% -45% -30%;height:75%;background:radial-gradient(circle,rgba(20,76,137,.26),transparent 68%);transition:.4s}
+.wine-card:hover{transform:translateY(-6px);border-color:rgba(217,173,88,.45)}
+.wine-card.featured{background:linear-gradient(145deg,rgba(21,74,136,.25),rgba(5,7,13,.45));border-color:rgba(217,173,88,.34)}
+.wine-no{font:600 12px Cinzel,serif;color:var(--gold)}
+.wine-card h3{font-size:22px;line-height:1.25;margin:75px 0 15px;position:relative}
+.wine-card p{color:#9fa6b2;line-height:1.7;font-size:13px;position:relative}
+.wine-card a{color:var(--gold-light);font-size:11px;text-transform:uppercase;letter-spacing:1.5px;text-decoration:none;position:absolute;bottom:25px}
+.quote-section{background:linear-gradient(180deg,var(--navy),#05070d);padding-top:40px}
+.quote-card{max-width:1000px;margin:auto;text-align:center;padding:70px 8vw;border-top:1px solid var(--line);border-bottom:1px solid var(--line);position:relative}
+.quote-mark{font:700 70px Georgia,serif;color:var(--gold);opacity:.8}
+blockquote{font:500 clamp(24px,3.3vw,43px)/1.45 Cinzel,serif;margin:0;color:#eee6d7}
+.quote-card p{color:var(--gold);font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-top:28px}
+.contact{padding-top:90px;padding-bottom:110px;background:#05070d}
+.contact-inner{max-width:1150px;margin:auto;border:1px solid rgba(217,173,88,.22);padding:55px 6vw;display:flex;align-items:center;justify-content:space-between;gap:40px;background:linear-gradient(110deg,rgba(16,45,80,.42),rgba(8,11,18,.8))}
+.contact h2{font-size:clamp(30px,4vw,50px);margin:12px 0}
+.contact p:not(.eyebrow){max-width:650px;color:#9fa6b2;line-height:1.8}
+footer{padding:42px 7vw;text-align:center;border-top:1px solid rgba(217,173,88,.13);background:#03050a}
+.footer-brand{font:700 17px Cinzel,serif;letter-spacing:4px;color:var(--cream)}
+.footer-brand span{color:var(--gold)}
+footer p{color:#777e8a;font-size:10px;letter-spacing:2px;text-transform:uppercase}
+footer small{color:#555b66;font-size:10px}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:none}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@media(max-width:900px){
+ .nav{gap:15px}.nav a{font-size:10px}
+ .hero{grid-template-columns:1fr;padding-top:125px;text-align:center}
+ .hero:after{background:linear-gradient(180deg,rgba(5,7,13,.65),rgba(5,7,13,.25))}
+ .hero-copy{margin:auto}.eyebrow{justify-content:center}.lead{margin-left:auto;margin-right:auto}
+ .hero-logo{order:-1}.hero-logo img{width:min(70vw,420px)}
+ .hero-bottom{justify-content:center}
+ .intro-grid{grid-template-columns:1fr;gap:25px}
+ .wine-grid{grid-template-columns:1fr 1fr}
+ .contact-inner{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:640px){
+ .topbar{height:68px;padding:0 20px}.menu-toggle{display:block}
+ .nav{display:none;position:absolute;top:68px;left:0;right:0;background:rgba(5,7,13,.97);padding:18px 22px;flex-direction:column;border-bottom:1px solid var(--line)}
+ .nav.open{display:flex}.brand{font-size:11px}
+ .hero{padding:95px 22px 50px;min-height:100svh}.hero-logo img{width:85vw}
+ h1{font-size:46px;letter-spacing:-1px}.lead{font-size:14px}
+ .hero-bottom{gap:18px;flex-wrap:wrap}.section{padding:82px 22px}
+ .wine-grid{grid-template-columns:1fr}.wine-card{min-height:275px}
+ .quote-card{padding:55px 15px}
+ .contact-inner{padding:38px 25px}
+}
