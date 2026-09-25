@@ -1,16 +1,121 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#05070d"><title>Donnerfaust Vineyards – Verwaltung</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="dashboard.css"></head><body>
-<header class="topbar"><div class="topbar-left"><button class="menu-toggle" aria-label="Menü öffnen" aria-expanded="false">☰</button><a class="brand" href="#dashboard"><span class="brand-mark">DF</span><span>DONNERFAUST <b>VINEYARDS</b></span></a></div><nav class="nav" aria-label="Hauptmenü"><a href="#dashboard">Hauptseite</a><a href="#lager">Lager</a><a href="#bestellungen">Bestellungen</a><a href="#einkauf">Einkauf</a><a href="#verkauf">Verkauf</a><a href="#produktion">Produktion</a><a href="#rechnungen">Rechnungen</a><a href="#kasse">Kasse</a><a href="#mitarbeiter">Mitarbeiter</a><a href="#termine">Termine</a><a href="#provision">Provision</a><a href="#rezepte">Rezepte</a></nav></header>
-<main id="dashboard"><section class="hero"><div><p class="eyebrow">FAMILIE · WEIN · GESCHÄFT · ZUSAMMENHALT</p><h1>Donnerfaust <em>Vineyards</em></h1><p class="lead">Verwaltung für Winzerei, Weinstube, Lager, Kasse, Mitarbeiter und Produktion.</p></div><div class="hero-logo"><img src="assets/logo.webp" alt="Donnerfaust Vineyards"></div></section>
-<section class="section"><p class="eyebrow">GESCHÄFTSÜBERSICHT</p><h2>Alles Wichtige auf <span>einen Blick.</span></h2><div class="stats-grid"><a class="stat-card" href="#bestellungen"><span>OFFENE BESTELLUNGEN</span><strong id="statOrders">0</strong><small>Bestellungen bearbeiten</small></a><a class="stat-card" href="#termine"><span>TERMINE</span><strong id="statAppointments">0</strong><small>Anstehende Termine</small></a><a class="stat-card" href="#rechnungen"><span>OFFENE RECHNUNGEN</span><strong id="statInvoices">0</strong><small>Noch nicht bezahlt</small></a><a class="stat-card" href="#lager"><span>LAGERBESTAND</span><strong id="statStock">0</strong><small>Artikel im Bestand</small></a></div></section>
-<section class="section" id="bestellungen"><div class="module-title"><div><p class="eyebrow">BESTELLWESEN</p><h2>Offene <span>Aufträge.</span></h2></div><button class="btn btn-gold" onclick="openForm('order')">+ Auftrag</button></div><div class="table-wrap"><table><thead><tr><th>Kunde</th><th>Bestellung</th><th>Termin</th><th>Betrag</th><th>Status</th><th></th></tr></thead><tbody id="ordersBody"></tbody></table></div></section>
-<section class="section" id="termine"><div class="module-title"><div><p class="eyebrow">KALENDER</p><h2>Bevorstehende <span>Termine.</span></h2></div><button class="btn btn-gold" onclick="openForm('appointment')">+ Termin</button></div><div class="cards" id="appointments"></div></section>
-<section class="section" id="einkauf"><div class="module-title"><div><p class="eyebrow">WARENEINGANG</p><h2>Einkauf <span>buchen.</span></h2><p class="muted">Einkäufe werden hier erfasst und später automatisch mit Lager und Kasse verbunden.</p></div></div><div class="contact-inner"><p class="muted">Einkaufserfassung vorbereitet. Artikel, Stückzahl und hinterlegter Einkaufspreis werden zentral verarbeitet.</p></div></section>
-<section class="section" id="verkauf"><div class="module-title"><div><p class="eyebrow">WARENAUSGANG</p><h2>Verkauf <span>buchen.</span></h2><p class="muted">Direktverkäufe werden hier erfasst und später automatisch mit Lager, Kasse und Provision verbunden.</p></div></div><div class="contact-inner"><p class="muted">Verkaufserfassung vorbereitet. Der hinterlegte Verkaufspreis wird automatisch verwendet.</p></div></section>
-<section class="section" id="rechnungen"><div class="module-title"><div><p class="eyebrow">FINANZEN</p><h2>Offene <span>Rechnungen.</span></h2></div><button class="btn btn-gold" onclick="openForm('invoice')">+ Rechnung</button></div><div class="table-wrap"><table><thead><tr><th>Rechnung</th><th>Kunde</th><th>Fällig</th><th>Betrag</th><th>Status</th><th></th></tr></thead><tbody id="invoicesBody"></tbody></table></div></section>
-<section class="section" id="lager"><div class="module-title"><div><p class="eyebrow">BESTAND</p><h2>Lager<span>verzeichnis.</span></h2></div><button class="btn btn-gold" onclick="openForm('item')">+ Artikel</button></div><div class="table-wrap"><table><thead><tr><th>Artikel</th><th>Kategorie</th><th>Bestand</th><th>Einheit</th><th>Preis</th><th></th></tr></thead><tbody id="itemsBody"></tbody></table></div></section>
-<section class="section" id="kasse"><div class="module-title"><div><p class="eyebrow">BUCHHALTUNG</p><h2>Kassen<span>verzeichnis.</span></h2></div><button class="btn btn-gold" onclick="openForm('cash')">+ Kassenbuchung</button></div><div class="cash-total"><span>Kassenstand</span><strong id="cashTotal">0,00 $</strong></div><div class="table-wrap"><table><thead><tr><th>Datum</th><th>Beschreibung</th><th>Typ</th><th>Betrag</th><th></th></tr></thead><tbody id="cashBody"></tbody></table></div></section>
-<section class="section" id="mitarbeiter"><div class="module-title"><div><p class="eyebrow">TEAM</p><h2>Mitarbeiter<span>liste.</span></h2></div><button class="btn btn-gold" onclick="openForm('employee')">+ Mitarbeiter</button></div><div class="employee-grid" id="employees"></div></section>
-<section class="section" id="provision"><div class="module-title"><div><p class="eyebrow">ABRECHNUNG</p><h2>Provisions<span>rechner.</span></h2></div></div><div class="calculator"><label>Mitarbeiter<select id="commissionEmployee"></select></label><label>Umsatz ($)<input id="commissionRevenue" type="number" min="0" step=".01"></label><label>Provisionssatz (%)<input id="commissionRate" type="number" min="0" step=".1" value="10"></label><div class="calc-result"><span>Provision</span><strong id="commissionResult">0,00 $</strong></div></div></section>
-<section class="section" id="produktion"><div class="module-title"><div><p class="eyebrow">FERTIGUNG</p><h2>Produktion <span>buchen.</span></h2><p class="muted">Rezept auswählen → Stückzahl festlegen → benötigte Artikel werden automatisch berechnet. Beim Buchen wird der RP-Lagerbestand automatisch angepasst.</p></div><button class="btn btn-gold" onclick="openProduction()">+ Produktion</button></div><div class="production-box"><div class="production-controls"><label>Rezept<select id="productionRecipe"></select></label><label>Stückzahl<input id="productionQty" type="number" min="1" step="1" value="1"></label><div class="calc-result"><span>Produktionsergebnis</span><strong id="productionOutput">–</strong></div></div><div class="table-wrap"><table><thead><tr><th>Benötigter Artikel</th><th>Pro Rezept</th><th>Für Produktion</th><th>Lagerbestand</th><th>Status</th></tr></thead><tbody id="productionPreview"></tbody></table></div><div class="production-actions"><button class="btn btn-gold" onclick="bookProduction()">Produktion buchen</button></div></div><div class="module-title production-history-title"><div><p class="eyebrow">HISTORIE</p><h3>Letzte <span>Produktionen.</span></h3></div></div><div class="table-wrap"><table><thead><tr><th>Datum</th><th>Rezept</th><th>Menge</th><th>Produktionsergebnis</th></tr></thead><tbody id="productionHistory"></tbody></table></div></section><section class="section" id="rezepte"><div class="module-title"><div><p class="eyebrow">PRODUKTION</p><h2>Rezepte & <span>Items.</span></h2><p class="muted">Items und Rezepte selbstständig hinzufügen.</p></div><div class="button-row"><button class="btn btn-gold" onclick="openForm('item')">+ Item</button><button class="btn" onclick="openForm('recipe')">+ Rezept</button></div></div><div class="recipe-grid" id="recipes"></div></section>
-<section class="section"><div class="contact-inner"><p class="eyebrow">DONNERFAUST VINEYARDS</p><h2>Tradition. Handwerk. <span>Familie.</span></h2><p class="muted">Die Verwaltung ist modular aufgebaut und kann um weitere Bereiche und Benutzerrechte erweitert werden.</p></div></section></main>
-<div class="modal" id="modal"><div class="modal-box"><button class="modal-close" onclick="closeForm()">×</button><div id="formContent"></div></div></div><footer><div class="footer-brand">DONNERFAUST <span>VINEYARDS</span></div><p>Familie · Wein · Geschäft · Zusammenhalt</p></footer><script src="dashboard.js"></script></body></html>
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#05070d">
+<title>Donnerfaust Vineyards – Verwaltung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left">
+    <button class="menu-toggle" id="menuToggle" aria-label="Menü öffnen" aria-expanded="false">☰</button>
+    <a class="brand" href="#dashboard"><span class="brand-mark">DF</span><span>DONNERFAUST <b>VINEYARDS</b></span></a>
+  </div>
+</header>
+
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head"><span>VERWALTUNG</span><button id="drawerClose">×</button></div>
+  <nav class="drawer-nav">
+    <a href="#dashboard">🏠 <span>Hauptseite</span></a>
+    <a href="#lager">📦 <span>Lager</span></a>
+    <a href="#bestellungen">📋 <span>Bestellungen</span></a>
+    <a href="#einkauf">🛒 <span>Einkauf</span></a>
+    <a href="#verkauf">💰 <span>Verkauf</span></a>
+    <a href="#produktion">🍷 <span>Produktion</span></a>
+    <a href="#rechnungen">🧾 <span>Rechnungen</span></a>
+    <a href="#kasse">💵 <span>Kasse</span></a>
+    <a href="#mitarbeiter">👥 <span>Mitarbeiter</span></a>
+    <a href="#termine">📅 <span>Termine</span></a>
+    <a href="#provision">💳 <span>Provision</span></a>
+    <a href="#rezepte">📖 <span>Rezepte</span></a>
+  </nav>
+</aside>
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+<main id="dashboard">
+<section class="hero">
+  <div><p class="eyebrow">FAMILIE · WEIN · GESCHÄFT · ZUSAMMENHALT</p><h1>Donnerfaust <em>Vineyards</em></h1><p class="lead">Deine zentrale Verwaltung für Lager, Rezepte, Produktion, Einkauf, Verkauf, Bestellungen, Kasse und Mitarbeiter.</p></div>
+  <div class="hero-logo"><img src="assets/logo.webp" alt="Donnerfaust Vineyards"></div>
+</section>
+
+<section class="section" id="overview">
+<p class="eyebrow">GESCHÄFTSÜBERSICHT</p><h2>Alles Wichtige auf <span>einen Blick.</span></h2>
+<div class="stats-grid">
+<a class="stat-card" href="#lager"><span>LAGERBESTAND</span><strong id="statStock">0</strong><small>Stück im Lager</small></a>
+<a class="stat-card" href="#produktion"><span>PRODUKTION</span><strong id="statProduction">0</strong><small>gebuchte Produktionen</small></a>
+<a class="stat-card" href="#bestellungen"><span>BESTELLUNGEN</span><strong id="statOrders">0</strong><small>offene Bestellungen</small></a>
+<a class="stat-card" href="#rechnungen"><span>RECHNUNGEN</span><strong id="statInvoices">0</strong><small>offene Rechnungen</small></a>
+<a class="stat-card" href="#kasse"><span>KASSENSTAND</span><strong id="statCash">0 $</strong><small>aktueller Stand</small></a>
+<a class="stat-card" href="#mitarbeiter"><span>MITARBEITER</span><strong id="statEmployees">0</strong><small>aktive Mitarbeiter</small></a>
+</div>
+</section>
+
+<section class="section" id="lager">
+<div class="module-title"><div><p class="eyebrow">BESTAND</p><h2>Lager<span>verwaltung.</span></h2><p class="muted">Du legst Ressourcen selbst an. Bestände werden ausschließlich über Buchungen verändert.</p></div><button class="btn btn-gold" onclick="openForm('item')">+ Ressource</button></div>
+<div class="table-wrap"><table><thead><tr><th>Artikel / Ressource</th><th>Kategorie</th><th>Bestand</th><th>Einkaufspreis</th><th></th></tr></thead><tbody id="itemsBody"></tbody></table></div>
+</section>
+
+<section class="section" id="bestellungen">
+<div class="module-title"><div><p class="eyebrow">BESTELLWESEN</p><h2>Bestellungen<span>.</span></h2><p class="muted">Vorbereiten, später erledigen und dann automatisch Lager und Kasse buchen.</p></div><button class="btn btn-gold" onclick="openForm('order')">+ Bestellung</button></div>
+<div class="table-wrap"><table><thead><tr><th>Nr.</th><th>Kunde</th><th>Positionen</th><th>Gesamt</th><th>Status</th><th></th></tr></thead><tbody id="ordersBody"></tbody></table></div>
+</section>
+
+<section class="section" id="einkauf">
+<div class="module-title"><div><p class="eyebrow">WARENEINGANG</p><h2>Einkauf<span>.</span></h2><p class="muted">Ressource auswählen → Stückzahl eingeben → hinterlegter Einkaufspreis wird verwendet.</p></div><button class="btn btn-gold" onclick="openForm('purchase')">+ Einkauf buchen</button></div>
+<div class="table-wrap"><table><thead><tr><th>Datum</th><th>Ressource</th><th>Menge</th><th>Preis</th><th>Gesamt</th><th>Mitarbeiter</th></tr></thead><tbody id="purchasesBody"></tbody></table></div>
+</section>
+
+<section class="section" id="verkauf">
+<div class="module-title"><div><p class="eyebrow">WARENAUSGANG</p><h2>Verkauf<span>.</span></h2><p class="muted">Produkt auswählen → Stückzahl eingeben → hinterlegter Verkaufspreis und 50-%-Provision werden automatisch berechnet.</p></div><button class="btn btn-gold" onclick="openForm('sale')">+ Verkauf buchen</button></div>
+<div class="table-wrap"><table><thead><tr><th>Datum</th><th>Produkt</th><th>Menge</th><th>Preis</th><th>Gesamt</th><th>Mitarbeiter</th></tr></thead><tbody id="salesBody"></tbody></table></div>
+</section>
+
+<section class="section" id="produktion">
+<div class="module-title"><div><p class="eyebrow">FERTIGUNG</p><h2>Produktion<span>.</span></h2><p class="muted">Rezept wählen → Menge eingeben → Ressourcen werden geprüft, abgezogen und das fertige Produkt gutgeschrieben.</p></div><button class="btn btn-gold" onclick="openProduction()">+ Produktion buchen</button></div>
+<div class="production-box"><div class="production-controls"><label>Rezept<select id="productionRecipe"></select></label><label>Stückzahl<input id="productionQty" type="number" min="1" step="1" value="1"></label><div class="calc-result"><span>Ergebnis</span><strong id="productionOutput">–</strong></div></div>
+<div class="table-wrap"><table><thead><tr><th>Ressource</th><th>Pro Rezept</th><th>Benötigt</th><th>Bestand</th><th>Status</th></tr></thead><tbody id="productionPreview"></tbody></table></div></div>
+<div class="module-title production-history-title"><div><p class="eyebrow">HISTORIE</p><h3>Letzte <span>Produktionen.</span></h3></div></div>
+<div class="table-wrap"><table><thead><tr><th>Datum</th><th>Rezept</th><th>Menge</th><th>Produkt</th><th>Mitarbeiter</th></tr></thead><tbody id="productionHistory"></tbody></table></div>
+</section>
+
+<section class="section" id="rechnungen">
+<div class="module-title"><div><p class="eyebrow">FINANZEN</p><h2>Rechnungen<span>.</span></h2><p class="muted">Rechnungen können später direkt mit Bestellungen und Verkäufen verknüpft werden.</p></div><button class="btn btn-gold" onclick="openForm('invoice')">+ Rechnung</button></div>
+<div class="table-wrap"><table><thead><tr><th>Nr.</th><th>Kunde</th><th>Quelle</th><th>Betrag</th><th>Status</th></tr></thead><tbody id="invoicesBody"></tbody></table></div>
+</section>
+
+<section class="section" id="kasse">
+<div class="module-title"><div><p class="eyebrow">BUCHHALTUNG</p><h2>Kasse<span>.</span></h2><p class="muted">Einkäufe, Verkäufe und erledigte Bestellungen laufen automatisch in den Kassenstand.</p></div></div>
+<div class="cash-total"><span>Kassenstand</span><strong id="cashTotal">0,00 $</strong></div>
+<div class="table-wrap"><table><thead><tr><th>Datum</th><th>Beschreibung</th><th>Typ</th><th>Betrag</th></tr></thead><tbody id="cashBody"></tbody></table></div>
+</section>
+
+<section class="section" id="mitarbeiter">
+<div class="module-title"><div><p class="eyebrow">TEAM</p><h2>Mitarbeiter<span>.</span></h2><p class="muted">Mitarbeiter, Ränge und offene Provisionen zentral verwalten.</p></div><button class="btn btn-gold" onclick="openForm('employee')">+ Mitarbeiter</button></div>
+<div class="employee-grid" id="employees"></div>
+</section>
+
+<section class="section" id="termine">
+<div class="module-title"><div><p class="eyebrow">KALENDER</p><h2>Termine<span>.</span></h2></div><button class="btn btn-gold" onclick="openForm('appointment')">+ Termin</button></div>
+<div class="cards" id="appointments"></div>
+</section>
+
+<section class="section" id="provision">
+<div class="module-title"><div><p class="eyebrow">ABRECHNUNG</p><h2>Provision<span>.</span></h2><p class="muted">Jeder Mitarbeiter erhält automatisch 50 % Provision auf seine abrechenbaren Vorgänge.</p></div></div>
+<div class="employee-grid" id="commissionList"></div>
+</section>
+
+<section class="section" id="rezepte">
+<div class="module-title"><div><p class="eyebrow">PRODUKTION</p><h2>Rezepte<span>.</span></h2><p class="muted">Du definierst selbst, welche Ressourcen für welches Produkt benötigt werden.</p></div><button class="btn btn-gold" onclick="openForm('recipe')">+ Rezept</button></div>
+<div class="recipe-grid" id="recipes"></div>
+</section>
+
+<section class="section"><div class="contact-inner"><p class="eyebrow">DONNERFAUST VINEYARDS</p><h2>Tradition. Handwerk. <span>Familie.</span></h2><p class="muted">Diese Verwaltung wächst mit deinen eigenen Ressourcen, Rezepten, Produkten und Arbeitsabläufen.</p></div></section>
+</main>
+
+<div class="modal" id="modal"><div class="modal-box"><button class="modal-close" onclick="closeForm()">×</button><div id="formContent"></div></div></div>
+<footer><div class="footer-brand">DONNERFAUST <span>VINEYARDS</span></div><p>Familie · Wein · Geschäft · Zusammenhalt</p></footer>
+<script src="dashboard.js"></script>
+</body></html>
