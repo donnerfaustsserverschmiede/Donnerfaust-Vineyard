@@ -2,7 +2,7 @@ const K='dfv-v3';
 const seed={orders:[],appointments:[],invoices:[],items:[],cash:[],employees:[],recipes:[],productions:[]};
 let db=JSON.parse(localStorage.getItem(K)||'null')||seed;
 const $=s=>document.querySelector(s);
-const euro=n=>new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(Number(n)||0);
+const euro=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(Number(n)||0);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 const uid=()=>Date.now()+Math.random().toString(16).slice(2);
 const save=()=>{localStorage.setItem(K,JSON.stringify(db));render();};
@@ -29,7 +29,7 @@ function render(){
 
   $('#ordersBody').innerHTML=db.orders.map(x=>'<tr><td>'+esc(x.customer)+'</td><td>'+esc(x.order)+'</td><td>'+esc(x.date)+'</td><td>'+euro(x.amount)+'</td><td><span class="tag '+(x.status==='Erledigt'?'ok':'warn')+'">'+esc(x.status)+'</span></td><td><button onclick="del(\'orders\',\''+x.id+'\')">Löschen</button></td></tr>').join('')||empty(6,'Keine Aufträge.');
   $('#invoicesBody').innerHTML=db.invoices.map(x=>'<tr><td>'+esc(x.number)+'</td><td>'+esc(x.customer)+'</td><td>'+esc(x.due)+'</td><td>'+euro(x.amount)+'</td><td><span class="tag '+(x.status==='Bezahlt'?'ok':'danger')+'">'+esc(x.status)+'</span></td><td><button onclick="del(\'invoices\',\''+x.id+'\')">Löschen</button></td></tr>').join('')||empty(6,'Keine Rechnungen.');
-  $('#itemsBody').innerHTML=db.items.map(x=>'<tr><td>'+esc(x.name)+'</td><td>'+esc(x.category)+'</td><td>'+esc(x.stock)+'</td><td>'+esc(x.unit)+'</td><td>'+euro(x.price)+'</td><td><button onclick="del(\'items\',\''+x.id+'\')">Löschen</button></td></tr>').join('')||empty(6,'Noch keine Items.');
+  $('#itemsBody').innerHTML=db.items.map(x=>'<tr><td>'+esc(x.name)+'</td><td>'+esc(x.category)+'</td><td>'+esc(x.stock)+'</td><td>'+'Stück'+'</td><td>'+euro(x.price)+'</td><td><button onclick="del(\'items\',\''+x.id+'\')">Löschen</button></td></tr>').join('')||empty(6,'Noch keine Items.');
 
   const cash=db.cash.reduce((a,x)=>a+(x.type==='Einnahme'?1:-1)*(+x.amount||0),0);
   $('#cashTotal').textContent=euro(cash);
@@ -104,7 +104,7 @@ function getProductionData(recipeId,qty){
 }
 function renderModalProduction(){
   const data=getProductionData($('#modalProductionRecipe')?.value,$('#modalProductionQty')?.value);if(!data)return;
-  $('#modalProductionPreview').innerHTML='<div class="production-summary"><b>Benötigte Artikel</b>'+data.requirements.map(x=>'<div class="requirement '+(x.ok?'available':'missing')+'"><span>'+esc(x.item?.name||'Unbekannter Artikel')+'</span><span>'+x.need+' '+esc(x.item?.unit||'')+' / Lager: '+(x.item?.stock??0)+'</span></div>').join('')+'<div class="output-line">Ausgabe: <b>'+esc(data.out?.name||'Unbekannt')+' × '+data.outputAmount+'</b></div></div>';
+  $('#modalProductionPreview').innerHTML='<div class="production-summary"><b>Benötigte Artikel</b>'+data.requirements.map(x=>'<div class="requirement '+(x.ok?'available':'missing')+'"><span>'+esc(x.item?.name||'Unbekannter Artikel')+'</span><span>'+x.need+' '+'Stück'+' / Lager: '+(x.item?.stock??0)+'</span></div>').join('')+'<div class="output-line">Ausgabe: <b>'+esc(data.out?.name||'Unbekannt')+' × '+data.outputAmount+'</b></div></div>';
 }
 function renderProduction(){
   const select=$('#productionRecipe');if(!select)return;
@@ -119,7 +119,7 @@ function updateProductionPreview(){
   const recipeId=$('#productionRecipe')?.value,qty=$('#productionQty')?.value,data=getProductionData(recipeId,qty);
   if(!data){$('#productionPreview').innerHTML=empty(5,'Kein Rezept vorhanden.');$('#productionOutput').textContent='–';return;}
   $('#productionOutput').textContent=data.outputAmount+' × '+(data.out?.name||'unbekannt');
-  $('#productionPreview').innerHTML=data.requirements.map(x=>'<tr><td>'+esc(x.item?.name||'Unbekannter Artikel')+'</td><td>'+x.per+' '+esc(x.item?.unit||'')+'</td><td>'+x.need+' '+esc(x.item?.unit||'')+'</td><td>'+((x.item?.stock??0))+' '+esc(x.item?.unit||'')+'</td><td><span class="tag '+(x.ok?'ok':'danger')+'">'+(x.ok?'Verfügbar':'Zu wenig Lagerbestand')+'</span></td></tr>').join('')||empty(5,'Rezept enthält keine Zutaten.');
+  $('#productionPreview').innerHTML=data.requirements.map(x=>'<tr><td>'+esc(x.item?.name||'Unbekannter Artikel')+'</td><td>'+x.per+' '+'Stück'+'</td><td>'+x.need+' '+'Stück'+'</td><td>'+((x.item?.stock??0))+' '+'Stück'+'</td><td><span class="tag '+(x.ok?'ok':'danger')+'">'+(x.ok?'Verfügbar':'Zu wenig Lagerbestand')+'</span></td></tr>').join('')||empty(5,'Rezept enthält keine Zutaten.');
 }
 function bookProduction(){
   const data=getProductionData($('#productionRecipe')?.value,$('#productionQty')?.value);bookProductionData(data);
